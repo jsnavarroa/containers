@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:10
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=example
+      - POSTGRES_DB=metabase
+
+  metabase:
+    image: metabase/metabase
+    container_name: metabase
+    environment:
+      - MB_DB_TYPE=postgres
+      - MB_DB_DBNAME=metabase
+      - MB_DB_PORT=5432
+      - MB_DB_USER=docker
+      - MB_DB_PASS=example
+      - MB_DB_HOST=db
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
